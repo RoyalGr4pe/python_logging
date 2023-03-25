@@ -3,6 +3,9 @@ import loguru
 
 class LogClass(object):
     def __init__(self):
+        """
+        Initilize so object can use self
+        """
         pass
 
     @staticmethod
@@ -30,6 +33,9 @@ class LogClass(object):
             ptt: bool = False, 
             clear_log: bool = False
             ):
+        """
+        Configure logger with some settings
+        """
         self.file = file
         self.ptt = ptt
         self.date_fmt = date_fmt
@@ -38,10 +44,16 @@ class LogClass(object):
             self.__clear_log()
 
     def __clear_log(self):
+        """
+        Clear the log file
+        """
         with open(self.file, 'w') as file:
             file.truncate()
     
     def log(self, msg: str, log_type: str):
+        """
+        Custom log
+        """
         if self.ptt: loguru.logger.log(10, msg)
         now = datetime.now()
         time = now.strftime(self.date_fmt)
@@ -50,6 +62,9 @@ class LogClass(object):
             file.write(log)        
 
     def info(self, msg: str):
+        """
+        Info Log
+        """
         if self.ptt: loguru.logger.info(msg)
         now = datetime.now()
         time = now.strftime(self.date_fmt)
@@ -58,6 +73,9 @@ class LogClass(object):
             file.write(log)
 
     def debug(self, msg: str):
+        """
+        Debug Log
+        """
         if self.ptt: loguru.logger.debug(msg)
         now = datetime.now()
         time = now.strftime(self.date_fmt)
@@ -66,6 +84,9 @@ class LogClass(object):
             file.write(log)
 
     def warning(self, msg: str):
+        """
+        Warning Log
+        """
         if self.ptt: loguru.logger.warning(msg)
         now = datetime.now()
         time = now.strftime(self.date_fmt)
@@ -74,6 +95,9 @@ class LogClass(object):
             file.write(log)
 
     def error(self, msg: str):
+        """
+        Error Log
+        """
         if self.ptt: loguru.logger.error(msg)
         now = datetime.now()
         time = now.strftime(self.date_fmt)
@@ -82,6 +106,9 @@ class LogClass(object):
             file.write(log)
 
     def critical(self, msg: str):
+        """
+        Critical Log
+        """
         if self.ptt: loguru.logger.critical(msg)
         now = datetime.now()
         time = now.strftime(self.date_fmt)
@@ -90,6 +117,9 @@ class LogClass(object):
             file.write(log)
 
     def success(self, msg: str):
+        """
+        Success Log
+        """
         if self.ptt: loguru.logger.success(msg)
         now = datetime.now()
         time = now.strftime(self.date_fmt)

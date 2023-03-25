@@ -3,7 +3,7 @@ import setuptools
 setuptools.setup(
     include_package_data=True,
     name='python_logging',
-    version='0.0.5',
+    version='0.0.6',
     description='Python logging tool for .log files',
     url='https://github.com/RoyalGr4pe/python_logging',
     author="Royal Gr4pe",
