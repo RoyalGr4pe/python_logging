@@ -1,7 +1,7 @@
 from datetime import datetime
-from loguru import logger
+import loguru
 
-class logging(object):
+class LogClass(object):
     def __init__(self):
         pass
 
@@ -42,7 +42,7 @@ class logging(object):
             file.truncate()
     
     def log(self, msg: str, log_type: str):
-        if self.ptt: logger.log(10, msg)
+        if self.ptt: loguru.logger.log(10, msg)
         now = datetime.now()
         time = now.strftime(self.date_fmt)
         with open(self.file, 'a') as file:
@@ -50,7 +50,7 @@ class logging(object):
             file.write(log)        
 
     def info(self, msg: str):
-        if self.ptt: logger.info(msg)
+        if self.ptt: loguru.logger.info(msg)
         now = datetime.now()
         time = now.strftime(self.date_fmt)
         with open(self.file, 'a') as file:
@@ -58,7 +58,7 @@ class logging(object):
             file.write(log)
 
     def debug(self, msg: str):
-        if self.ptt: logger.debug(msg)
+        if self.ptt: loguru.logger.debug(msg)
         now = datetime.now()
         time = now.strftime(self.date_fmt)
         log = f"[{time}] | [DEBUG]: {msg}\n"
@@ -66,7 +66,7 @@ class logging(object):
             file.write(log)
 
     def warning(self, msg: str):
-        if self.ptt: logger.warning(msg)
+        if self.ptt: loguru.logger.warning(msg)
         now = datetime.now()
         time = now.strftime(self.date_fmt)
         log = f"[{time}] | [WARNING]: {msg}\n"
@@ -74,7 +74,7 @@ class logging(object):
             file.write(log)
 
     def error(self, msg: str):
-        if self.ptt: logger.error(msg)
+        if self.ptt: loguru.logger.error(msg)
         now = datetime.now()
         time = now.strftime(self.date_fmt)
         log = f"[{time}] | [ERROR]: {msg}\n"
@@ -82,7 +82,7 @@ class logging(object):
             file.write(log)
 
     def critical(self, msg: str):
-        if self.ptt: logger.critical(msg)
+        if self.ptt: loguru.logger.critical(msg)
         now = datetime.now()
         time = now.strftime(self.date_fmt)
         log = f"[{time}] | [CRITICAL]: {msg}\n"
@@ -90,9 +90,12 @@ class logging(object):
             file.write(log)
 
     def success(self, msg: str):
-        if self.ptt: logger.success(msg)
+        if self.ptt: loguru.logger.success(msg)
         now = datetime.now()
         time = now.strftime(self.date_fmt)
         log = f"[{time}] | [SUCCESS]: {msg}\n"
         with open(self.file, 'a') as file:
             file.write(log)
+
+
+logger = LogClass()
