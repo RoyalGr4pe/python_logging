@@ -2,6 +2,9 @@ from datetime import datetime
 from loguru import logger
 
 class logging(object):
+    def __init__(self):
+        pass
+
     @staticmethod
     def staticmethod():
         print("""
