@@ -10,5 +10,6 @@ setuptools.setup(
     author_email="njames.programming@gmail.com",
     packages=setuptools.find_packages(),
     install_requires=['loguru'],
-    long_description="Python logging tool for .log file"
+    long_description="Python logging tool for .log file",
+    license='MIT'
 )
