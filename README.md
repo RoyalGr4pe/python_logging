@@ -1,5 +1,4 @@
 # Python Logger 
-- [Github Page](https://github.com/RoyalGr4pe/python_logging)
 
 How to use
 
