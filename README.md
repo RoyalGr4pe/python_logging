@@ -8,7 +8,7 @@ How to use
 from python_logging.logger import logger
 
 """
-ptt is print in terminal
+ptt is print to terminal
 clear_log will clear the log file on run
 """
 logger.config(file="offspring_release.log", ptt=True, clear_log=True)
