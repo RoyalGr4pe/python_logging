@@ -1,5 +1,26 @@
 from datetime import datetime
-import loguru
+from inspect import getframeinfo, stack
+from datetime import datetime
+from colours import colour
+import inspect
+
+
+def __print_layout(caller: inspect.Traceback, error_colour: str, log_type: str, message: str, time: str) -> str:
+    return f"""
+{colour.BOLD}-------------------------------------------------
+| [{error_colour}{log_type}{colour.WHITE}]
+|
+| Log Info: {error_colour}{message}{colour.WHITE}
+|
+| [{colour.BLUE}{caller.filename}{colour.WHITE}:{colour.PURPLE}{caller.lineno}{colour.WHITE}]
+| [{colour.GREEN}{time}{colour.WHITE}] 
+-------------------------------------------------"""
+
+
+def __log_file_layout(caller: inspect.Traceback, log_type: str, message: str, time: str) -> str:
+    return f"""[{time}] | {caller.filename}:{caller.lineno} | [{log_type}] | {message}
+"""
+
 
 class LogClass(object):
     def __init__(self):
@@ -7,6 +28,7 @@ class LogClass(object):
         Initilize so object can use self
         """
         pass
+
 
     @staticmethod
     def staticmethod():
@@ -26,6 +48,7 @@ class LogClass(object):
         _____________________________________        
         """)
 
+
     def config(
             self, 
             file: str = "logging.log", 
@@ -43,89 +66,82 @@ class LogClass(object):
         if clear_log:
             self.__clear_log()
 
+
     def __clear_log(self):
         """
         Clear the log file
         """
         with open(self.file, 'w') as file:
             file.truncate()
+
     
-    def log(self, msg: str, log_type: str):
+    def __main_log(self, caller: inspect.Traceback, msg: str, log_type: str, log_colour: str) -> None:
+        now = datetime.today()
+        time = now.strftime(self.date_fmt)
+
+        if self.ptt:
+            print_log_message = __print_layout(caller=caller, error_colour=log_colour, log_type=log_type, message=msg, time=time)
+            print(print_log_message)
+
+        log_file_message = __log_file_layout(caller=caller, log_type=log_type, message=msg, time=time)
+        with open(self.file, 'a') as file:
+            file.write(log_file_message) 
+
+
+    def log(self, msg: str, log_type: str, log_colour: str = colour.PURPLE) -> None:
         """
         Custom log
         """
-        if self.ptt: loguru.logger.log(10, msg)
-        now = datetime.now()
-        time = now.strftime(self.date_fmt)
-        with open(self.file, 'a') as file:
-            log = f"[{time}] | [{log_type}]: {msg}\n"
-            file.write(log)        
+        caller = getframeinfo(stack()[1][0])
+        self.__main_log(caller=caller, msg=msg, log_type=log_type, log_colour=log_colour)     
 
-    def info(self, msg: str):
+
+    def info(self, msg: str) -> None:
         """
         Info Log
         """
-        if self.ptt: loguru.logger.info(msg)
-        now = datetime.now()
-        time = now.strftime(self.date_fmt)
-        with open(self.file, 'a') as file:
-            log = f"[{time}] | [INFO]: {msg}\n"
-            file.write(log)
+        caller = getframeinfo(stack()[1][0])
+        self.__main_log(caller=caller, msg=msg, log_type="INFO", log_colour=colour.CYAN)
 
-    def debug(self, msg: str):
+
+    def debug(self, msg: str) -> None:
         """
         Debug Log
         """
-        if self.ptt: loguru.logger.debug(msg)
-        now = datetime.now()
-        time = now.strftime(self.date_fmt)
-        log = f"[{time}] | [DEBUG]: {msg}\n"
-        with open(self.file, 'a') as file:
-            file.write(log)
+        caller = getframeinfo(stack()[1][0])
+        self.__main_log(caller=caller, msg=msg, log_type="DEBUG", log_colour=colour.DARKCYAN)
 
-    def warning(self, msg: str):
+
+    def warning(self, msg: str) -> None:
         """
         Warning Log
         """
-        if self.ptt: loguru.logger.warning(msg)
-        now = datetime.now()
-        time = now.strftime(self.date_fmt)
-        log = f"[{time}] | [WARNING]: {msg}\n"
-        with open(self.file, 'a') as file:
-            file.write(log)
+        caller = getframeinfo(stack()[1][0])
+        self.__main_log(caller=caller, msg=msg, log_type="WARNING", log_colour=colour.YELLOW)
 
-    def error(self, msg: str):
+
+    def error(self, msg: str) -> None:
         """
         Error Log
         """
-        if self.ptt: loguru.logger.error(msg)
-        now = datetime.now()
-        time = now.strftime(self.date_fmt)
-        log = f"[{time}] | [ERROR]: {msg}\n"
-        with open(self.file, 'a') as file:
-            file.write(log)
+        caller = getframeinfo(stack()[1][0])
+        self.__main_log(caller=caller, msg=msg, log_type="ERROR", log_colour=colour.RED)
 
-    def critical(self, msg: str):
+
+    def critical(self, msg: str) -> None:
         """
         Critical Log
         """
-        if self.ptt: loguru.logger.critical(msg)
-        now = datetime.now()
-        time = now.strftime(self.date_fmt)
-        log = f"[{time}] | [CRITICAL]: {msg}\n"
-        with open(self.file, 'a') as file:
-            file.write(log)
+        caller = getframeinfo(stack()[1][0])
+        self.__main_log(caller=caller, msg=msg, log_type="CRITICAL", log_colour=colour.MAGENTA)
 
-    def success(self, msg: str):
+
+    def success(self, msg: str) -> None:
         """
         Success Log
         """
-        if self.ptt: loguru.logger.success(msg)
-        now = datetime.now()
-        time = now.strftime(self.date_fmt)
-        log = f"[{time}] | [SUCCESS]: {msg}\n"
-        with open(self.file, 'a') as file:
-            file.write(log)
+        caller = getframeinfo(stack()[1][0])
+        self.__main_log(caller=caller, msg=msg, log_type="SUCCESS", log_colour=colour.GREEN)
 
 
 logger = LogClass()
