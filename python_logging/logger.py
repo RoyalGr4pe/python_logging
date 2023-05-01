@@ -5,23 +5,6 @@ from python_logging.colours import colour
 import inspect
 
 
-def __print_layout(caller: inspect.Traceback, error_colour: str, log_type: str, message: str, time: str) -> str:
-    return f"""
-{colour.BOLD}-------------------------------------------------
-| [{error_colour}{log_type}{colour.WHITE}]
-|
-| Log Info: {error_colour}{message}{colour.WHITE}
-|
-| [{colour.BLUE}{caller.filename}{colour.WHITE}:{colour.PURPLE}{caller.lineno}{colour.WHITE}]
-| [{colour.GREEN}{time}{colour.WHITE}] 
--------------------------------------------------"""
-
-
-def __log_file_layout(caller: inspect.Traceback, log_type: str, message: str, time: str) -> str:
-    return f"""[{time}] | {caller.filename}:{caller.lineno} | [{log_type}] | {message}
-"""
-
-
 class LogClass(object):
     def __init__(self):
         """
@@ -80,12 +63,29 @@ class LogClass(object):
         time = now.strftime(self.date_fmt)
 
         if self.ptt:
-            print_log_message = __print_layout(caller=caller, error_colour=log_colour, log_type=log_type, message=msg, time=time)
+            print_log_message = self.__print_layout(caller=caller, error_colour=log_colour, log_type=log_type, message=msg, time=time)
             print(print_log_message)
 
-        log_file_message = __log_file_layout(caller=caller, log_type=log_type, message=msg, time=time)
+        log_file_message = self.__log_file_layout(caller=caller, log_type=log_type, message=msg, time=time)
         with open(self.file, 'a') as file:
             file.write(log_file_message) 
+
+
+    def __print_layout(self, caller: inspect.Traceback, error_colour: str, log_type: str, message: str, time: str) -> str:
+        return f"""
+{colour.BOLD}-------------------------------------------------
+| [{error_colour}{log_type}{colour.WHITE}]
+|
+| Log Info: {error_colour}{message}{colour.WHITE}
+|
+| [{colour.BLUE}{caller.filename}{colour.WHITE}:{colour.PURPLE}{caller.lineno}{colour.WHITE}]
+| [{colour.GREEN}{time}{colour.WHITE}] 
+-------------------------------------------------"""
+
+
+    def __log_file_layout(self, caller: inspect.Traceback, log_type: str, message: str, time: str) -> str:
+        return f"""[{time}] | {caller.filename}:{caller.lineno} | [{log_type}] | {message}
+"""
 
 
     def log(self, msg: str, log_type: str, log_colour: str = colour.PURPLE) -> None:
