@@ -1,7 +1,7 @@
 from datetime import datetime
 from inspect import getframeinfo, stack
 from datetime import datetime
-from colours import colour
+from python_logging.colours import colour
 import inspect
 
 
