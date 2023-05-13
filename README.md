@@ -10,14 +10,20 @@ How to use
     clear_log will clear the log file on run
     """
     logger.config(file="offspring_release.log", ptt=True, clear_log=True)
+    
+    try:
+        name = 5 + "5"
+        error = None
+    except Exception as error:
+        pass
 
-    logger.info(msg="Info")
-    logger.debug(msg="Info")
-    logger.warning(msg="Info")
-    logger.error(msg="Info")
-    logger.critical(msg="Info")
-    logger.success(msg="Info")
-    logger.log(msg="Info", log_type="Custom Log")
+    logger.info(msg="Info", error=error)
+    logger.debug(msg="Info", error=error)
+    logger.warning(msg="Info", error=error)
+    logger.error(msg="Info", error=error)
+    logger.critical(msg="Info", error=error)
+    logger.success(msg="Info", error=error)
+    logger.log(msg="Info", log_type="Custom Log", error=error)
 
 
 Run the below command to install
