@@ -58,12 +58,12 @@ class LogClass(object):
             file.truncate()
 
     
-    def __main_log(self, caller: inspect.Traceback, msg: str, log_type: str, log_colour: str) -> None:
+    def __main_log(self, caller: inspect.Traceback, msg: str, log_type: str, log_colour: str, error: Exception) -> None:
         now = datetime.today()
         time = now.strftime(self.date_fmt)
 
         if self.ptt:
-            print_log_message = self.__print_layout(caller=caller, error_colour=log_colour, log_type=log_type, message=msg, time=time)
+            print_log_message = self.__print_layout(caller=caller, error_colour=log_colour, log_type=log_type, message=msg, time=time, error=error)
             print(print_log_message)
 
         log_file_message = self.__log_file_layout(caller=caller, log_type=log_type, message=msg, time=time)
@@ -71,77 +71,81 @@ class LogClass(object):
             file.write(log_file_message) 
 
 
-    def __print_layout(self, caller: inspect.Traceback, error_colour: str, log_type: str, message: str, time: str) -> str:
-        return f"""
-{colour.BOLD}-------------------------------------------------
-| [{error_colour}{log_type}{colour.WHITE}]
-|
-| Log Info: {error_colour}{message}{colour.WHITE}
-|
-| [{colour.BLUE}{caller.filename}{colour.WHITE}:{colour.PURPLE}{caller.lineno}{colour.WHITE}]
-| [{colour.GREEN}{time}{colour.WHITE}] 
--------------------------------------------------"""
+    def __print_layout(self, caller: inspect.Traceback, error_colour: str, log_type: str, message: str, time: str, error: Exception) -> str:
+        line_break = "|\n"
+        top = f"\n{colour.BOLD}-------------------------------------------------\n"
+        error_names = f"| [{error_colour}{log_type}{colour.WHITE}]"
+        log_info = f"| Log Info: {error_colour}{message}{colour.WHITE}\n"
+        file_loc = f"| [{colour.BLUE}{caller.filename}{colour.WHITE}:{colour.PURPLE}{caller.lineno}{colour.WHITE}]\n"
+        time = f"| [{colour.GREEN}{time}{colour.WHITE}]\n"
+        bottom = f"-------------------------------------------------"
+        if error:
+            error_names += f"[{error_colour}{type(error).__name__}{colour.WHITE}]\n"
+            error_info = f"| Error: {error_colour}{error}{colour.WHITE}\n"
+            return top + error_names + line_break + log_info + error_info + line_break + file_loc + time + bottom
+        else:
+            error_names += "\n"
+            return top + error_names + line_break + log_info + line_break + file_loc + time + bottom
 
 
     def __log_file_layout(self, caller: inspect.Traceback, log_type: str, message: str, time: str) -> str:
-        return f"""[{time}] | {caller.filename}:{caller.lineno} | [{log_type}] | {message}
-"""
+        return f"[{time}] | {caller.filename}:{caller.lineno} | [{log_type}] | {message}\n"
 
 
-    def log(self, msg: str, log_type: str, log_colour: str = colour.PURPLE) -> None:
+    def log(self, msg: str, log_type: str, log_colour: str = colour.PURPLE, error: Exception = None) -> None:
         """
         Custom log
         """
         caller = getframeinfo(stack()[1][0])
-        self.__main_log(caller=caller, msg=msg, log_type=log_type, log_colour=log_colour)     
+        self.__main_log(caller=caller, msg=msg, log_type=log_type, log_colour=log_colour, error=error)     
 
 
-    def info(self, msg: str) -> None:
+    def info(self, msg: str, error: Exception = None) -> None:
         """
         Info Log
         """
         caller = getframeinfo(stack()[1][0])
-        self.__main_log(caller=caller, msg=msg, log_type="INFO", log_colour=colour.CYAN)
+        self.__main_log(caller=caller, msg=msg, log_type="INFO", log_colour=colour.CYAN, error=error)
 
 
-    def debug(self, msg: str) -> None:
+    def debug(self, msg: str, error: Exception = None) -> None:
         """
         Debug Log
         """
         caller = getframeinfo(stack()[1][0])
-        self.__main_log(caller=caller, msg=msg, log_type="DEBUG", log_colour=colour.DARKCYAN)
+        self.__main_log(caller=caller, msg=msg, log_type="DEBUG", log_colour=colour.DARKCYAN, error=error)
 
 
-    def warning(self, msg: str) -> None:
+    def warning(self, msg: str, error: Exception = None) -> None:
         """
         Warning Log
         """
         caller = getframeinfo(stack()[1][0])
-        self.__main_log(caller=caller, msg=msg, log_type="WARNING", log_colour=colour.YELLOW)
+        self.__main_log(caller=caller, msg=msg, log_type="WARNING", log_colour=colour.YELLOW, error=error)
 
 
-    def error(self, msg: str) -> None:
+    def error(self, msg: str, error: Exception = None) -> None:
         """
         Error Log
         """
         caller = getframeinfo(stack()[1][0])
-        self.__main_log(caller=caller, msg=msg, log_type="ERROR", log_colour=colour.RED)
+        self.__main_log(caller=caller, msg=msg, log_type="ERROR", log_colour=colour.RED, error=error)
 
 
-    def critical(self, msg: str) -> None:
+    def critical(self, msg: str, error: Exception = None) -> None:
         """
         Critical Log
         """
         caller = getframeinfo(stack()[1][0])
-        self.__main_log(caller=caller, msg=msg, log_type="CRITICAL", log_colour=colour.MAGENTA)
+        self.__main_log(caller=caller, msg=msg, log_type="CRITICAL", log_colour=colour.MAGENTA, error=error)
 
 
-    def success(self, msg: str) -> None:
+    def success(self, msg: str, error: Exception = None) -> None:
         """
         Success Log
         """
         caller = getframeinfo(stack()[1][0])
-        self.__main_log(caller=caller, msg=msg, log_type="SUCCESS", log_colour=colour.GREEN)
+        self.__main_log(caller=caller, msg=msg, log_type="SUCCESS", log_colour=colour.GREEN, error=error)
 
 
 logger = LogClass()
