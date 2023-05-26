@@ -15,15 +15,13 @@ How to use
         name = 5 + "5"
         error = None
     except Exception as error:
-        pass
-
-    logger.info(msg="Info", error=error)
-    logger.debug(msg="Info", error=error)
-    logger.warning(msg="Info", error=error)
-    logger.error(msg="Info", error=error)
-    logger.critical(msg="Info", error=error)
-    logger.success(msg="Info", error=error)
-    logger.log(msg="Info", log_type="Custom Log", error=error)
+        logger.info(msg="Info", error=error)
+        logger.debug(msg="Info", error=error)
+        logger.warning(msg="Info", error=error)
+        logger.error(msg="Info", error=error)
+        logger.critical(msg="Info", error=error)
+        logger.success(msg="Info", error=error)
+        logger.log(msg="Info", log_type="Custom Log", error=error)
 
 
 Run the below command to install
